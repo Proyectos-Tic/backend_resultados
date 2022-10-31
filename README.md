@@ -9,3 +9,5 @@ In this backend you can find the following modules:
 - Candidates
 - Votes
 - Reports
+
+:)
