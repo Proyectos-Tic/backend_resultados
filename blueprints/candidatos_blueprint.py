@@ -30,4 +30,4 @@ def update_candidate(id):
 @candidatos_blueprint.route("/candidato/delete/<string:id>", methods=["DELETE"])
 def delete_candidate(id):
     response = candidatos_controller.delete(id)
-    return response, 204
+    return response, 200
