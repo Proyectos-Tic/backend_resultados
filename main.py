@@ -4,8 +4,19 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from waitress import serve
 
+from blueprints.candidatos_blueprint import candidatos_blueprint
+from blueprints.mesas_blueprint import mesas_blueprint
+from blueprints.partidos_blueprint import partidos_blueprint
+from blueprints.votos_blueprint import votos_blueprint
+
+
 app = Flask(__name__)
 CORS(app)
+# Register blueprints
+app.register_blueprint(candidatos_blueprint)
+app.register_blueprint(mesas_blueprint)
+app.register_blueprint(partidos_blueprint)
+app.register_blueprint(votos_blueprint)
 
 @app.route("/", methods=["GET"])
 def home():
