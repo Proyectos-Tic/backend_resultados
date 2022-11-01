@@ -11,10 +11,10 @@ class MesasController():
         """
         print("Get all tables")
     
-    def show(self, id: int) -> dict:
+    def show(self, id: str) -> dict:
         """
         This method returns a table by id
-        :param id: int
+        :param id: str
         :return: dict
         """
         print("Get table by id")
@@ -27,19 +27,19 @@ class MesasController():
         """
         print("Create table")
     
-    def update(self, id: int, table: dict) -> dict:
+    def update(self, id: str, table: dict) -> dict:
         """
         This method updates a table by id
-        :param id: int
+        :param id: str
         :param table: dict
         :return: dict
         """
         print("Update table")
     
-    def delete(self, id: int) -> dict:
+    def delete(self, id: str) -> dict:
         """
         This method deletes a table by id
-        :param id: int
+        :param id: str
         :return: dict
         """
         print("Delete table")

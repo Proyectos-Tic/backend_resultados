@@ -12,11 +12,11 @@ class PartidosController():
         """
         print("Get all parties")
     
-    def show(self, id: int) -> dict:
+    def show(self, id: str) -> dict:
         """
         This method returns a party by id
 
-        :param id: int
+        :param id: str
         :return: dict
         """
         print("Get party by id")
@@ -30,21 +30,21 @@ class PartidosController():
         """
         print("Create party")
     
-    def update(self, id: int, party: dict) -> dict:
+    def update(self, id: str, party: dict) -> dict:
         """
         This method updates a party by id
 
-        :param id: int
+        :param id: str
         :param party: dict
         :return: dict
         """
         print("Update party")
     
-    def delete(self, id: int) -> dict:
+    def delete(self, id: str) -> dict:
         """
         This method deletes a party by id
 
-        :param id: int
+        :param id: str
         :return: dict
         """
         print("Delete party")

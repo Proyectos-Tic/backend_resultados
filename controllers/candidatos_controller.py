@@ -13,11 +13,11 @@ class CandidatosController():
         """
         print("Get all candidates")
 
-    def show(self, id: int) -> dict:
+    def show(self, id: str) -> dict:
         """
         This method returns a candidate by id
 
-        :param id: int
+        :param id: str
         :return: dict
         """
         print("Get candidate by id")
@@ -31,21 +31,21 @@ class CandidatosController():
         """
         print("Create candidate")
     
-    def update(self, id: int, candidate: dict) -> dict:
+    def update(self, id: str, candidate: dict) -> dict:
         """
         This method updates a candidate by id
 
-        :param id: int
+        :param id: str
         :param candidate: dict
         :return: dict
         """
         print("Update candidate")
     
-    def delete(self, id: int) -> dict:
+    def delete(self, id: str) -> dict:
         """
         This method deletes a candidate by id
 
-        :param id: int
+        :param id: str
         :return: dict
         """
         print("Delete candidate")

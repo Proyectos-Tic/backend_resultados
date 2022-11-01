@@ -12,10 +12,10 @@ class VotosController():
         """
         print("Get all votes")
     
-    def show(self, id: int) -> dict:
+    def show(self, id: str) -> dict:
         """
         This method returns a vote by id
-        :param id: int
+        :param id: str
         :return: dict
         """
         print("Get vote by id")
@@ -28,19 +28,19 @@ class VotosController():
         """
         print("Create vote")
     
-    def update(self, id: int, vote: dict) -> dict:
+    def update(self, id: str, vote: dict) -> dict:
         """
         This method updates a vote by id
-        :param id: int
+        :param id: str
         :param vote: dict
         :return: dict
         """
         print("Update vote")
     
-    def delete(self, id: int) -> dict:
+    def delete(self, id: str) -> dict:
         """
         This method deletes a vote by id
-        :param id: int
+        :param id: str
         :return: dict
         """
         print("Delete vote")
