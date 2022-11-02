@@ -1,2 +1,3 @@
-# bakend-reg
-reg 
+# Backend-reg
+reg
+/ Modulos: Mesas, partidos, candidatos, resultados
