@@ -12,8 +12,10 @@ ca = certifi.where()
 data_config = load_config()
 client = pymongo.MongoClient(data_config.get('db-connection'), tlsCAFile=ca)
 db = client.test
-print(db)
+if db!=None:
+    print("Connection successful to MongoDB")
+    print("User: ", data_config.get('db-user'))
 
-print(client.list_database_names())
-data_base = client['results_db']
-print(data_base.list_collection_names())
+data_base = client.get_database('results_db')
+print(f'Database: {data_base.name}')
+print(f'Collections: {data_base.list_collection_names()}')
