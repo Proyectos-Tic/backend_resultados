@@ -6,10 +6,11 @@ from typing import Generic, TypeVar, get_args
 
 T = TypeVar('T')
 
-print(get_args(list[int])[0].__name__)
+#print(get_args(list[int])[0].__name__)
 
 class InterfaceRepository(Generic[T]):
     def __init__(self) -> None:
+        # Connection to MongoDB
         ca = certifi.where()
         data_config = self.load_config()
         client = pymongo.MongoClient(
@@ -54,10 +55,10 @@ class InterfaceRepository(Generic[T]):
         item = self.transform_refs(item)
         if hasattr(item, '_id') and item._id != "":
             # Update
-            # item without _id
+                # item without _id to update
             delattr(item, '_id')
             item = item.__dict__
-            # _id filter
+                # _id filter to update
             id = item._id
             _id = ObjectId(id)
             updated_item = {'$set': item}
