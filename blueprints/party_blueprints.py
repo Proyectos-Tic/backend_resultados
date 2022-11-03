@@ -36,6 +36,3 @@ def update_party(id_):
 def delete_party(id_):
     response = party_controller.delete(id_)
     return response, 204
-
-
-
