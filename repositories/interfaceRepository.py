@@ -62,7 +62,7 @@ class InterfaceRepository(Generic[T]):
             _id = ObjectId(id_)
             delattr(item, '_id')
             item = item.__dict__
-            updated_item = {"$set", item}
+            updated_item = {"$set": item}
             self.current_collection.update_one({'_id': _id}, updated_item)
         else:
             _id = self.current_collection.insert_one(item.__dict__)
@@ -72,7 +72,7 @@ class InterfaceRepository(Generic[T]):
     def update(self, id_: str, item: T) -> dict:
         _id = ObjectId(id_)
         item_dict = item.__dict__
-        updated_item = {"$set", item_dict}
+        updated_item = {"$set": item_dict}
         result = self.current_collection.update_one({'_id': _id}, updated_item)
         return {"updated_count": result.matched_count}
 

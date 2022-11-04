@@ -5,7 +5,6 @@ from repositories.party_repository import PartyRepository
 class PartyController:
 
     def __init__(self):
-        print("Party controller constructor")
         self.party_repository = PartyRepository()
 
     def index(self) -> list:

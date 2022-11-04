@@ -1,9 +1,11 @@
+from models.result import Result
+from repositories.result_repository import ResultRespository
 
 
 class ResultController:
 
     def __init__(self):
-        print("Result Controller Constructor")
+        self.result_repository = ResultRespository()
 
     def create(self, result_:dict) -> dict:
         """
@@ -12,4 +14,6 @@ class ResultController:
         :param result_:
         :return:
         """
-        print("Create a new vote")
+        result = Result(result_)
+        return self.result_repository(result)
+

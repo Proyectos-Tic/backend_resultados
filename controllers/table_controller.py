@@ -1,9 +1,11 @@
+from models.table import Table
+from repositories.table_repository import TableRepository
 
 
 class TableController:
 
     def __init__(self):
-        print("Table Controller Constructor")
+        self.table_repository = TableRepository()
 
     def index(self) -> list:
         """
@@ -11,7 +13,7 @@ class TableController:
 
         :return:
         """
-        print("Get all tables")
+        return self.table_repository.find_all()
 
     def show(self, id_: str) -> dict:
         """
@@ -20,7 +22,7 @@ class TableController:
         :param id_:
         :return:
         """
-        print("Get a specific table given its id")
+        return self.table_repository.find_by_id(id_)
 
     def create(self, table_: dict) -> dict:
         """
@@ -29,7 +31,8 @@ class TableController:
         :param table_:
         :return:
         """
-        print("Create a new table")
+        table = Table(table_)
+        return self.table_repository.save(table)
 
     def update(self, id_: str, table_: dict) -> dict:
         """
@@ -39,13 +42,14 @@ class TableController:
         :param table_:
         :return:
         """
-        print("Modify an existing table")
+        table = Table(table_)
+        return self.table_repository.update(id_, table)
 
-    def delete(self, id_: str) -> str:
+    def delete(self, id_: str) -> dict:
         """
         Delete a table providing its id
 
         :param id_:
         :return:
         """
-        print("Delete a table providing its id")
+        return self.table_repository.delete(id_)
