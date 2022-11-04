@@ -1,9 +1,12 @@
+from models.party import Party
+from repositories.party_repository import PartyRepository
 
 
 class PartyController:
 
     def __init__(self):
         print("Party controller constructor")
+        self.party_repository = PartyRepository()
 
     def index(self) -> list:
         """
@@ -11,7 +14,7 @@ class PartyController:
 
         :return:
         """
-        print("Get all parties")
+        return self.party_repository.find_all()
 
     def show(self, id_: str) -> dict:
         """
@@ -20,7 +23,7 @@ class PartyController:
         :param id_:
         :return:
         """
-        print("Get a specific party provided the id")
+        return self.party_repository.find_by_id(id_)
 
     def create(self, party_: dict) -> dict:
         """
@@ -29,7 +32,8 @@ class PartyController:
         :param party_:
         :return:
         """
-        print("Create a new party")
+        party = Party(party_)
+        return self.party_repository.save(party)
 
     def update(self, id_: str, party_: dict) -> dict:
         """
@@ -39,13 +43,14 @@ class PartyController:
         :param party_:
         :return:
         """
-        print("Modify an existing party")
+        party = Party(party_)
+        return self.party_repository.update(id_, party)
 
-    def delete(self, id_: str) -> str:
+    def delete(self, id_: str) -> dict:
         """
         Delete a party providing its id
         
         :param id_:
         :return:
         """
-        print("Delete a party providing its id")
+        return self.party_repository.delete(id_)
