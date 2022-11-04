@@ -7,12 +7,14 @@ from waitress import serve
 from blueprints.candidate_bluepritns import candidate_blueprints
 from blueprints.party_blueprints import party_blueprints
 from blueprints.table_blueprints import table_blueprints
+from blueprints.result_blueprints import result_blueprints
 
 app = Flask(__name__)
 cors = CORS(app)
 app.register_blueprint(candidate_blueprints)
 app.register_blueprint(party_blueprints)
 app.register_blueprint(table_blueprints)
+app.register_blueprint(result_blueprints)
 
 
 @app.route("/", methods=['GET'])
