@@ -1,5 +1,5 @@
 import json
-from bson import ObjectId
+from bson import ObjectId, DBRef
 import pymongo
 import certifi
 from typing import Generic, TypeVar, get_args
@@ -30,9 +30,9 @@ class InterfaceRepository(Generic[T]):
         return data
 
 #==========SPRINT 1 ==========
-    def find_all(self) -> list:
+    def find_all(self, query: dict = {}) -> list:
         dataset = []
-        for document in self.current_collection.find():
+        for document in self.current_collection.find(query):
             document['_id'] = document['_id'].__str__()
             document = self.transform_object_ids(document)
             document = self.get_values_db_ref(document)
@@ -55,24 +55,33 @@ class InterfaceRepository(Generic[T]):
         item = self.transform_refs(item)
         if hasattr(item, '_id') and item._id != "":
             # Update
-                # item without _id to update
-            delattr(item, '_id')
-            item = item.__dict__
                 # _id filter to update
             id = item._id
             _id = ObjectId(id)
+                # item without _id to update
+            delattr(item, '_id')
+            item = item.__dict__
             updated_item = {'$set': item}
             self.current_collection.update_one({'_id': _id}, updated_item)
         else:
             # Insert
-            _id = self.current_collection.insert_one(item.__dict__)
+            result = self.current_collection.insert_one(item.__dict__)
+            id = result.inserted_id.__str__()
+        return self.find_by_id(id)
 
-    # TODO: Verify the return type
+    # TODO: Verify the return type and check if it is necessary to implement the method
     def update(self, id: str, item: T) -> dict:
-        pass
+        _id = ObjectId(id)
+        item_dict = item.__dict__
+        updated_item = {'$set': item_dict}
+        result = self.current_collection.update_one({'_id': _id}, updated_item)
+        # TODO check what could be the best response
+        return {'Updated_count': result.matched_count}
 
     def delete(self, id: str) -> dict:
-        pass
+        _id = ObjectId(id)
+        result = self.current_collection.delete_one({'_id': _id})
+        return {'Deleted_count': result.deleted_count}
 
     #Format methods: Secure full compatible with MongoDB <-> Python
     # TODO: Implement the query/format methods in just one method
@@ -84,49 +93,109 @@ class InterfaceRepository(Generic[T]):
         :param document: Obj from MongoDB
         :return: Obj compatible with Python
         """
-        pass
+        for key in document.keys():
+            value = document.get(key)
+            if isinstance(value, DBRef):
+                collection_ref = self.data_base.get_collection(value.collection)
+                _id = ObjectId(value.id)
+                document_ref = collection_ref.find_one({'_id': _id})
+                document_ref['_id'] = document_ref['_id'].__str__()
+                # TODO: Change order
+                document[key] = document_ref
+                document[key] = self.get_values_db_ref(document[key])
+            elif isinstance(value,list) and len(list) > 0:
+                document[key] = self.get_values_db_ref_from_list(value)
+            elif isinstance(value, dict):
+                document[key] = self.get_values_db_ref(value)
+        return document
 
-    def get_values_db_ref_from(self, document) -> list:
+
+
+    def get_values_db_ref_from_list(self, list: list) -> list:
         """
         Mongo -> Py
         """
-        pass
+        processed_list = []
+        collection_ref = self.data_base[list[0]._id.collection]
+        for item in list:
+            _id = ObjectId(item._id)
+            document_ref = collection_ref.find_one({'_id':_id})
+            document_ref['_id'] = document_ref['_id'].__str__()
+            processed_list.append(document_ref)
+        return processed_list
 
-    def transform_object_ids(self):
+
+    def transform_object_ids(self, document: dict) -> dict:
         """
         This method transform sub-documents
         Mongo -> Py
         """
-        pass
+        for key in document.keys():
+            value = document.get(key)
+            if isinstance(value, ObjectId):
+                document[key] = document[key].__str__()
+            elif isinstance(value, list) and len(list) > 0:
+                document[key] = self.format_list(value)
+            elif isinstance(value, dict):
+                document[key] = self.transform_object_ids(value)
+        return document
 
-    def transform_refs(self):
+    def transform_refs(self, item: T) -> T:
         """
         Py -> Mongo
         :return:
         """
-        pass
+        item_dict = item.__dict__
+        for key in item_dict.keys:
+            if item_dict.get(key).__str__.count("object") == 1:
+                object_ = self.object_to_db_ref(getattr(item, key))
+                setattr(item, key, object_)
+        return item
 
 #==========SPRINT 2 ==========
+    #TODO: merge with find_all
     def query(self, query: dict) -> list:
         """
         This method make filtered queries
         """
-        pass
+        dataset = []
+        for document in self.current_collection.find(query):
+            document['_id'] = document['_id'].__str__()
+            document = self.transform_object_ids(document)
+            document = self.get_values_db_ref(document)
+            dataset.append(document)
+        return dataset
 
+    # TODO: create a function to format the query
     def query_aggregation(self, query: dict) -> list:
         """
         Pylint: queries generated by the database
         """
-        pass
+        dataset = []
+        for document in self.current_collection.aggregate(query):
+            document['_id'] = document['_id'].__str__()
+            document = self.transform_object_ids(document)
+            document = self.get_values_db_ref(document)
+            dataset.append(document)
+        return dataset
 
-    def format_list(self):
+    def format_list(self, list: list) -> list:
         """
-        Py -> Mongo
+        Mongo -> Py
         """
-        pass
+        processed_list = []
+        for item in list:
+            if isinstance(item, ObjectId):
+                temp = item.__str__
+                processed_list.append(temp)
+        if not processed_list:
+            processed_list =  list
+        return processed_list
 
-    def object_to_db_ref(self):
+    def object_to_db_ref(self, object_ref) -> DBRef:
         """
         This method format a list of values, similar to toString() in Java
+        Py -> Mongo
         """
-        pass
+        collection_ref = object_ref.__class__.__name__.lower()
+        return DBRef(collection_ref, ObjectId(object_ref._id))
