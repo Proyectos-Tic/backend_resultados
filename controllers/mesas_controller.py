@@ -1,8 +1,11 @@
+from models.mesas import Mesas
+from repositories.mesas_repository import MesasRepository
 
 class MesasController():
     
     def __init__(self) -> None:
         print("Mesas controller ready...")
+        self.mesas_repository = MesasRepository()
 
     def index(self) -> list:
         """
@@ -10,6 +13,7 @@ class MesasController():
         :return: list
         """
         print("Get all tables")
+        return self.mesas_repository.find_all()
     
     def show(self, id: str) -> dict:
         """
@@ -18,6 +22,7 @@ class MesasController():
         :return: dict
         """
         print("Get table by id")
+        return self.mesas_repository.find_by_id(id)
     
     def create(self, table: dict) -> dict:
         """
@@ -26,6 +31,8 @@ class MesasController():
         :return: dict
         """
         print("Create table")
+        table_ = Mesas(table)
+        return self.mesas_repository.save(table_)
     
     def update(self, id: str, table: dict) -> dict:
         """
@@ -35,6 +42,8 @@ class MesasController():
         :return: dict
         """
         print("Update table")
+        table_ = Mesas(table)
+        return self.mesas_repository.update(id, table_)
     
     def delete(self, id: str) -> dict:
         """
@@ -43,3 +52,4 @@ class MesasController():
         :return: dict
         """
         print("Delete table")
+        return self.mesas_repository.delete(id)
