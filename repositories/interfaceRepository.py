@@ -146,8 +146,8 @@ class InterfaceRepository(Generic[T]):
         :return:
         """
         item_dict = item.__dict__
-        for key in item_dict.keys:
-            if item_dict.get(key).__str__.count("object") == 1:
+        for key in item_dict.keys():
+            if item_dict.get(key).__str__().count("object") == 1:
                 object_ = self.object_to_db_ref(getattr(item, key))
                 setattr(item, key, object_)
         return item
@@ -186,7 +186,7 @@ class InterfaceRepository(Generic[T]):
         processed_list = []
         for item in list:
             if isinstance(item, ObjectId):
-                temp = item.__str__
+                temp = item.__str__()
                 processed_list.append(temp)
         if not processed_list:
             processed_list =  list
