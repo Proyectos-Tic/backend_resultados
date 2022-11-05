@@ -1,9 +1,11 @@
-
+from models.votos import Votos
+from repositories.votos_repository import VotosRepository
 
 class VotosController():
 
     def __init__(self) -> None:
         print("Votos controller ready...")
+        self.votos_repository = VotosRepository()
     
     def index(self) -> list:
         """
@@ -11,6 +13,7 @@ class VotosController():
         :return: list
         """
         print("Get all votes")
+        return self.votos_repository.find_all()
     
     def show(self, id: str) -> dict:
         """
@@ -19,6 +22,7 @@ class VotosController():
         :return: dict
         """
         print("Get vote by id")
+        return self.votos_repository.find_by_id(id)
     
     def create(self, vote: dict) -> dict:
         """
@@ -27,6 +31,8 @@ class VotosController():
         :return: dict
         """
         print("Create vote")
+        vote_ = Votos(vote)
+        return self.votos_repository.save(vote_)
     
     def update(self, id: str, vote: dict) -> dict:
         """
@@ -36,6 +42,8 @@ class VotosController():
         :return: dict
         """
         print("Update vote")
+        vote_ = Votos(vote)
+        return self.votos_repository.update(id, vote_)
     
     def delete(self, id: str) -> dict:
         """
@@ -44,5 +52,6 @@ class VotosController():
         :return: dict
         """
         print("Delete vote")
+        return self.votos_repository.delete(id)
     
     
