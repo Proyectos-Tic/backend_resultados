@@ -45,7 +45,7 @@ class CandidateController:
         candidate = Candidate(candidate_)
         return self.candidate_repository.update(id_, candidate)
 
-    def delete(self, id_: str) -> str:
+    def delete(self, id_: str) -> dict:
         """
         Delete a candidate providing its id
 

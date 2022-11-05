@@ -109,7 +109,7 @@ class InterfaceRepository(Generic[T]):
                 document_ref['_id'] = document_ref['_id'].__str__()
                 document[key] = document_ref
                 document[key] = self.get_values_db_ref(document[key])
-            elif isinstance(value, list) and len(list) > 0:
+            elif isinstance(value, list):
                 document[key] = self.get_values_db_ref_from_list(value)
             elif isinstance(value, dict):
                 document[key] = self.get_values_db_ref(value)
@@ -117,12 +117,16 @@ class InterfaceRepository(Generic[T]):
 
     def get_values_db_ref_from_list(self, list_: list) -> list:
         processed_list = []
-        collection_ref = self.data_base[list_[0]._id.collection]
-        for item in list_:
-            _id = ObjectId(item._id)
-            document_ref = collection_ref.find_one({'_id': _id})
-            document_ref['_id'] = document_ref['_id'].__str__()
-            processed_list.append(document_ref)
+        if isinstance(list_[0], int):
+            for number in list_:
+                processed_list.append(number)
+        else:
+            collection_ref = self.data_base[list_[0]._id.collection]
+            for item in list_:
+                _id = ObjectId(item._id)
+                document_ref = collection_ref.find_one({'_id': _id})
+                document_ref['_id'] = document_ref['_id'].__str__()
+                processed_list.append(document_ref)
         return processed_list
 
     def transform_object_ids(self, document: dict) -> dict:
@@ -130,7 +134,7 @@ class InterfaceRepository(Generic[T]):
             value = document.get(key)
             if isinstance(value, ObjectId):
                 document[key] = document[key].__str__()
-            elif isinstance(value, list) and len(list) > 0:
+            elif isinstance(value, list):
                 document[key] = self.format_list(value)
             elif isinstance(value, dict):
                 document[key] = self.transform_object_ids(value)
