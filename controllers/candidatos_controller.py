@@ -1,11 +1,15 @@
 from models.candidatos import Candidatos
 from repositories.candidatos_repository import CandidatosRepository
 
+from models.partidos import Partidos
+from repositories.partidos_repository import PartidosRepository
+
 class CandidatosController():
 
     def __init__(self) -> None:
         print("Candidatos controller ready...")
         self.candidatos_repository = CandidatosRepository()
+        self.partidos_repository = PartidosRepository()
 
     def index(self) -> list:
         """
@@ -53,6 +57,17 @@ class CandidatosController():
         print("Update candidate")
         candidate_ = Candidatos(candidate)
         return self.candidatos_repository.update(id,candidate_)
+
+    def assign_party(self, candidate_id: str, party_id: str) -> dict:
+        """
+        
+        """
+        candidate_dict = self.candidatos_repository.find_by_id(candidate_id)
+        candidate_obj = Candidatos(candidate_dict)
+        party_dict = self.partidos_repository.find_by_id(party_id)
+        party_obj = Partidos(party_dict)
+        candidate_obj.partido = party_obj
+        return self.candidatos_repository.save(candidate_obj)
     
     def delete(self, id: str) -> dict:
         """
