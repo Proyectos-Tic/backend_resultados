@@ -15,10 +15,9 @@ def get_vote_by_id(id):
     response = votos_controller.show(id)
     return response, 200
 
-@votos_blueprint.route("/voto/create", methods=["POST"])
-def create_vote():
-    vote = request.get_json()
-    response = votos_controller.create(vote)
+@votos_blueprint.route("/voto/create/mesa/<string:mesa_id>/candidato/<string:candidato_id>", methods=["POST"])
+def create_vote(mesa_id, candidato_id):
+    response = votos_controller.create(mesa_id, candidato_id)
     return response, 201
 
 @votos_blueprint.route("/voto/update/<string:id>", methods=["PATCH"])
