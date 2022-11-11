@@ -36,3 +36,10 @@ def update_candidate(id_):
 def delete_candidate(id_):
     response = candidate_controller.delete(id_)
     return response, 204
+
+
+@candidate_blueprints.route("/candidate/<string:candidate_id>/party/<string:party_id>", methods=['PATCH'])
+def assign_party(candidate_id, party_id):
+    response = candidate_controller.party_assign(candidate_id, party_id)
+    return response, 201
+

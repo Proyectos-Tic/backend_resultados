@@ -81,7 +81,7 @@ class InterfaceRepository(Generic[T]):
         result = self.current_collection.delete_one({'_id': _id})
         return {"deleted_count": result.deleted_count}
 
-    def query(self,  query: dict) -> list:
+    def query(self, query: dict) -> list:
         dataset = []
         for document in self.current_collection.find(query):
             document['_id'] = document['_id'].__str__()
