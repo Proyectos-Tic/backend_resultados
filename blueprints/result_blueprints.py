@@ -35,3 +35,9 @@ def report_general_results():
 def report_table_participation():
     response = result_controller.get_table_participation()
     return response, 200
+
+
+@result_blueprints.route("/reports/parties", methods=['GET'])
+def report_party_votes():
+    response = result_controller.get_party_votes()
+    return response, 200
