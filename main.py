@@ -8,6 +8,7 @@ from blueprints.candidatos_blueprint import candidatos_blueprint
 from blueprints.mesas_blueprint import mesas_blueprint
 from blueprints.partidos_blueprint import partidos_blueprint
 from blueprints.votos_blueprint import votos_blueprint
+from blueprints.reporte_blueprint import reports_blueprints
 
 
 app = Flask(__name__)
@@ -17,6 +18,7 @@ app.register_blueprint(candidatos_blueprint)
 app.register_blueprint(mesas_blueprint)
 app.register_blueprint(partidos_blueprint)
 app.register_blueprint(votos_blueprint)
+app.register_blueprint(reports_blueprints)
 
 @app.route("/", methods=["GET"])
 def home():
