@@ -64,10 +64,127 @@ class ReportsRepository(InterfaceRepository[Votos]):
         return self.query_aggregation(pipeline)
 
     def get_sorted_partido(self) -> list:
-        return ['Get sorted partidos']
+        pipeline = [
+            {
+                '$lookup': {
+                    'from': 'candidatos', 
+                    'localField': 'candidato.$id', 
+                    'foreignField': '_id', 
+                    'as': 'result'
+                }
+            }, {
+                '$unwind': '$result'
+            }, {
+                '$addFields': {
+                    'partido': '$result.partido'
+                }
+            }, {
+                '$project': {
+                    'partido': 1, 
+                    '_id': 1
+                }
+            }, {
+                '$lookup': {
+                    'from': 'partidos', 
+                    'localField': 'partido.$id', 
+                    'foreignField': '_id', 
+                    'as': 'partidos'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$partidos'
+                }
+            }, {
+                '$group': {
+                    '_id': '$partidos._id', 
+                    'Votos_partido': {
+                        '$sum': 1
+                    }, 
+                    'partidos': {
+                        '$first': '$partidos'
+                    }
+                }
+            }, {
+                '$addFields': {
+                    'nombre': '$partidos.nombre'
+                }
+            }, {
+                '$sort': {
+                    'Votos_partido': -1
+                }
+            }, {
+                '$project': {
+                    '_id': 1, 
+                    'Votos_partido': 1, 
+                    'nombre': 1
+                }
+            }
+        ]
+        return self.query_aggregation(pipeline)
 
     def get_sorted_partido_by_mesa(self, mesa_id: str) -> list:
-        return ['Get sorted partidos by mesa']
+        pipeline = [
+            {
+                '$match': {
+                    'mesa.$id': ObjectId(mesa_id)
+                }
+            }, {
+                '$lookup': {
+                    'from': 'candidatos', 
+                    'localField': 'candidato.$id', 
+                    'foreignField': '_id', 
+                    'as': 'result'
+                }
+            }, {
+                '$unwind': '$result'
+            }, {
+                '$addFields': {
+                    'partido': '$result.partido'
+                }
+            }, {
+                '$project': {
+                    'partido': 1, 
+                    '_id': 1
+                }
+            }, {
+                '$lookup': {
+                    'from': 'partidos', 
+                    'localField': 'partido.$id', 
+                    'foreignField': '_id', 
+                    'as': 'partidos'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$partidos'
+                }
+            }, {
+                '$group': {
+                    '_id': '$partidos._id', 
+                    'Votos_partido': {
+                        '$sum': 1
+                    }, 
+                    'partidos': {
+                        '$first': '$partidos'
+                    }
+                }
+            }, {
+                '$addFields': {
+                    'nombre': '$partidos.nombre'
+                }
+            }, {
+                '$sort': {
+                    'Votos_partido': -1
+                }
+            }, {
+                '$project': {
+                    '_id': 1, 
+                    'Votos_partido': 1, 
+                    'nombre': 1
+                }
+            }
+        ]
+        print(self.query_aggregation(pipeline))
+        return self.query_aggregation(pipeline)
 
     def get_sorted_mesa(self) -> list:
         query_group = {
