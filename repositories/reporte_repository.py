@@ -208,4 +208,78 @@ class ReportsRepository(InterfaceRepository[Votos]):
         return self.query_aggregation(pipeline)
 
     def get_porcentual_partidos(self) -> list:
-        return ['Get sorted porcentual partidos'] 
+        pipeline = [
+                {
+                    '$group': {
+                        '_id': '$candidato.$id', 
+                        'Votos_candidato': {
+                            '$count': {}
+                        }, 
+                        'candidato': {
+                            '$first': '$candidato'
+                        }
+                    }
+                }, {
+                    '$sort': {
+                        'Votos_candidato': -1
+                    }
+                }, {
+                    '$limit': 15
+                }, {
+                    '$lookup': {
+                        'from': 'candidatos', 
+                        'localField': 'candidato.$id', 
+                        'foreignField': '_id', 
+                        'as': 'result'
+                    }
+                }, {
+                    '$unwind': {
+                        'path': '$result'
+                    }
+                }, {
+                    '$addFields': {
+                        'partido': '$result.partido'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'partidos', 
+                        'localField': 'partido.$id', 
+                        'foreignField': '_id', 
+                        'as': 'partidos'
+                    }
+                }, {
+                    '$unwind': {
+                        'path': '$partidos'
+                    }
+                }, {
+                    '$group': {
+                        '_id': '$partidos._id', 
+                        'Total_partido': {
+                            '$sum': 1
+                        }
+                    }
+                }, {
+                    '$project': {
+                        '_id': 1, 
+                        'Total_partido': 1, 
+                        'Porcentaje': {
+                            '$round': [
+                                {
+                                    '$multiply': [
+                                        {
+                                            '$divide': [
+                                                '$Total_partido', 15
+                                            ]
+                                        }, 100
+                                    ]
+                                }, 1
+                            ]
+                        }
+                    }
+                },{
+                    '$sort': {
+                        'Porcentaje': -1
+                    }
+                }
+            ]
+        return self.query_aggregation(pipeline)
