@@ -71,6 +71,7 @@ class InterfaceRepository(Generic[T]):
 
     # TODO: Verify the return type and check if it is necessary to implement the method
     def update(self, id: str, item: T) -> dict:
+        item = self.transform_refs(item)
         _id = ObjectId(id)
         item_dict = item.__dict__
         updated_item = {'$set': item_dict}

@@ -18,15 +18,15 @@ def get_vote_by_id(id):
 @votos_blueprint.route("/voto/create/mesa/<string:mesa_id>/candidato/<string:candidato_id>", methods=["POST"])
 def create_vote(mesa_id, candidato_id):
     response = votos_controller.create(mesa_id, candidato_id)
-    return response, 201
+    return response, 200
 
 @votos_blueprint.route("/voto/update/<string:id>", methods=["PATCH"])
 def update_vote(id):
     vote = request.get_json()
     response = votos_controller.update(id, vote)
-    return response, 201
+    return response, 200
 
 @votos_blueprint.route("/voto/delete/<string:id>", methods=["DELETE"])
 def delete_vote(id):
     response = votos_controller.delete(id)
-    return response, 204
+    return response, 200

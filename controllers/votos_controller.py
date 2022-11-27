@@ -19,7 +19,6 @@ class VotosController():
         This method returns a list of all votes
         :return: list
         """
-        print("Get all votes")
         return self.votos_repository.find_all()
     
     def show(self, id: str) -> dict:
@@ -28,7 +27,6 @@ class VotosController():
         :param id: str
         :return: dict
         """
-        print("Get vote by id")
         return self.votos_repository.find_by_id(id)
     
     def create(self, mesa_id: str, candidato_id: str) -> dict:
@@ -37,8 +35,6 @@ class VotosController():
         :param vote: dict
         :return: dict
         """
-        print("Create vote")
-        
         vote_ = Votos({})
         mesa_dict = self.mesas_repository.find_by_id(mesa_id)
         mesa_obj = Mesas(mesa_dict)
@@ -55,7 +51,6 @@ class VotosController():
         :param vote: dict
         :return: dict
         """
-        print("Update vote")
         vote_ = Votos(vote)
         return self.votos_repository.update(id, vote_)
     
@@ -65,7 +60,6 @@ class VotosController():
         :param id: str
         :return: dict
         """
-        print("Delete vote")
         return self.votos_repository.delete(id)
     
     
