@@ -12,7 +12,6 @@ class MesasController():
         This method returns a list of all tables
         :return: list
         """
-        print("Get all tables")
         return self.mesas_repository.find_all()
     
     def show(self, id: str) -> dict:
@@ -21,7 +20,6 @@ class MesasController():
         :param id: str
         :return: dict
         """
-        print("Get table by id")
         return self.mesas_repository.find_by_id(id)
     
     def create(self, table: dict) -> dict:
@@ -30,7 +28,6 @@ class MesasController():
         :param table: dict
         :return: dict
         """
-        print("Create table")
         table_ = Mesas(table)
         return self.mesas_repository.save(table_)
     
@@ -41,7 +38,6 @@ class MesasController():
         :param table: dict
         :return: dict
         """
-        print("Update table")
         table_ = Mesas(table)
         return self.mesas_repository.update(id, table_)
     
@@ -51,5 +47,4 @@ class MesasController():
         :param id: str
         :return: dict
         """
-        print("Delete table")
         return self.mesas_repository.delete(id)

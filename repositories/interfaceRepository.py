@@ -51,7 +51,7 @@ class InterfaceRepository(Generic[T]):
             document = {}
         return document
 
-    def save(self, item: T) -> T:
+    def save(self, item: T) -> dict:
         item = self.transform_refs(item)
         if hasattr(item, '_id') and item._id != "":
             # Update
@@ -60,8 +60,8 @@ class InterfaceRepository(Generic[T]):
             _id = ObjectId(id)
                 # item without _id to update
             delattr(item, '_id')
-            item = item.__dict__
-            updated_item = {'$set': item}
+            item_dict = item.__dict__
+            updated_item = {'$set': item_dict}
             self.current_collection.update_one({'_id': _id}, updated_item)
         else:
             # Insert
@@ -71,6 +71,7 @@ class InterfaceRepository(Generic[T]):
 
     # TODO: Verify the return type and check if it is necessary to implement the method
     def update(self, id: str, item: T) -> dict:
+        item = self.transform_refs(item)
         _id = ObjectId(id)
         item_dict = item.__dict__
         updated_item = {'$set': item_dict}
@@ -87,7 +88,7 @@ class InterfaceRepository(Generic[T]):
     # TODO: Implement the query/format methods in just one method
     def get_values_db_ref(self, document) -> T:
         """
-        This method transform sub-documents
+        This method transform docs and sub-docs(DBRef) to python dictionaries
         Mongo -> Py
 
         :param document: Obj from MongoDB
@@ -147,7 +148,7 @@ class InterfaceRepository(Generic[T]):
         """
         item_dict = item.__dict__
         for key in item_dict.keys():
-            if item_dict.get(key).__str__().count("object") == 1:
+            if str(item_dict[key]).count("object") == 1:
                 object_ = self.object_to_db_ref(getattr(item, key))
                 setattr(item, key, object_)
         return item

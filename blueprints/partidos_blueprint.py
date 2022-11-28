@@ -19,15 +19,15 @@ def get_party_by_id(id):
 def create_party():
     party = request.get_json()
     response = partidos_controller.create(party)
-    return response, 201
+    return response, 200
 
 @partidos_blueprint.route("/partido/update/<string:id>", methods=["PATCH"])
 def update_party(id):
     party = request.get_json()
     response = partidos_controller.update(id, party)
-    return response, 201
+    return response, 200
 
 @partidos_blueprint.route("/partido/delete/<string:id>", methods=["DELETE"])
 def delete_party(id):
     response = partidos_controller.delete(id)
-    return response, 204
+    return response, 200

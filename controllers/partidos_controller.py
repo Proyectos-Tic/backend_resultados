@@ -12,7 +12,6 @@ class PartidosController():
 
         :return: list
         """
-        print("Get all parties")
         return self.partidos_repository.find_all()
     
     def show(self, id: str) -> dict:
@@ -22,7 +21,6 @@ class PartidosController():
         :param id: str
         :return: dict
         """
-        print("Get party by id")
         return self.partidos_repository.find_by_id(id)
     
     def create(self, party: dict) -> dict:
@@ -32,7 +30,6 @@ class PartidosController():
         :param party: dict
         :return: dict
         """
-        print("Create party")
         party_ = Partidos(party)
         return self.partidos_repository.save(party_)
     
@@ -44,7 +41,6 @@ class PartidosController():
         :param party: dict
         :return: dict
         """
-        print("Update party")
         party_ = Partidos(party)
         return self.partidos_repository.update(id, party_)
     
@@ -55,6 +51,5 @@ class PartidosController():
         :param id: str
         :return: dict
         """
-        print("Delete party")
         return self.partidos_repository.delete(id)
     

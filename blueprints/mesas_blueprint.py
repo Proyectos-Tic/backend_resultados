@@ -19,15 +19,15 @@ def get_table_by_id(id):
 def create_table():
     table = request.get_json()
     response = mesas_controller.create(table)
-    return response, 201
+    return response, 200
 
 @mesas_blueprint.route("/mesa/update/<string:id>", methods=["PATCH"])
 def update_table(id):
     table = request.get_json()
     response = mesas_controller.update(id, table)
-    return response, 201
+    return response, 200
 
 @mesas_blueprint.route("/mesa/delete/<string:id>", methods=["DELETE"])
 def delete_table(id):
     response = mesas_controller.delete(id)
-    return response, 204
+    return response, 200
