@@ -35,7 +35,8 @@ class CandidateController:
         :return:
         """
         candidate = Candidate(candidate_)
-        return self.candidate_repository.save(candidate)
+        response = self.candidate_repository.save(candidate);
+        return response
 
     def update(self, id_: str, candidate_: dict) -> dict:
         """
@@ -72,4 +73,6 @@ class CandidateController:
 
         candidate_obj.party = party_obj
         return self.candidate_repository.save(candidate_obj)
+
+
 

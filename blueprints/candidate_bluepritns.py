@@ -21,7 +21,12 @@ def get_candidate_by_id(id_):
 @candidate_blueprints.route("/candidate/insert", methods=['POST'])
 def insert_candidate():
     candidate = request.get_json()
-    response = candidate_controller.create(candidate)
+    creation_response = candidate_controller.create(candidate)
+    candidate_id = creation_response['_id'];
+    party_id = creation_response['party']['_id']
+    print(f'CANDIDATE ID = {candidate_id}')
+    print(f'PARTY ID = {party_id}')
+    response = candidate_controller.party_assign(candidate_id, party_id);
     return response, 201
 
 
